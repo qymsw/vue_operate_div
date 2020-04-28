@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Vue 测试实例 - 菜鸟教程(runoob.com)</title>
+<script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+<style>
+  li{
+    position: absolute;
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <button @click="show_todo">{{model}}</button> 
+	  <ol>
+      <todo-item v-for="item in sites" v-bind:todo="item" v-show="!visible"></todo-item>
+  	</ol>
+    {{aaa}}
+</div>
+
+<script>
+Vue.component('todo-item', {
+    props: ['todo'],
+    template: '<li @mousedown="move">{{ todo.text }}</li>',
+    methods:{
+     	test:function(e){
+    		alert(e.target.innerHTML)
+    	},
+      move(e){
+          // alert('dfdfdf')
+          // console.log(e.target)
+          // console.log(e.target.parentNode.title)
+                let odiv = e.target;
+                        //获取目标元素
+                // let timestart = new Date().getTime()
+                // console.log(timestart)
+                // //算出鼠标相对元素的位置
+                let disX = e.clientX - odiv.offsetLeft
+                let disY = e.clientY - odiv.offsetTop
+                console.log(disX,disY)
+                document.onmousemove = (e)=>{       //鼠标按下并移动的事件
+                    //用鼠标的位置减去鼠标相对元素的位置，得到元素的位置
+                    let left = e.clientX - disX;    
+                    let top = e.clientY - disY;                   
+                    //绑定元素位置到positionX和positionY上面
+                    this.positionX = top;
+                    this.positionY = left;                    
+                    //移动当前元素
+                    odiv.style.left = left + 'px';
+                    odiv.style.top = top + 'px';
+                };
+                document.onmouseup = (e) => {
+                  // let timeend = new Date().getTime()
+                  // if((timeend - timestart)<=200){
+                  //   this.createElem(e.target.parentNode)
+                  // }
+                    document.onmousemove = null;
+                    document.onmouseup = null;                    
+                };
+            },         
+   }
+})
+new Vue({
+  el: '#app',
+  data: {
+    sites: [
+      { text: 'Runoob' },
+      { text: 'Google' },
+      { text: 'Taobao' },
+    ],
+    aaa:'dsfdfdf',
+    model: '展示模式',
+    visible:true,    
+  },
+  methods:{
+      show_todo:function(){
+        if(this.visible){
+          this.model = '编辑模式'
+        }else{
+          this.model = '展示模式'
+        }
+        this.visible = !this.visible
+
+      },
+    }
+})
+</script>
+</body>
+</html>

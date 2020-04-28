@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="../vue.js"></script>
+</head>
+
+<body>
+   	<div v-for="(v,i) in list">
+        <div class="form-group  m-form__group row" style="padding-top: 15px;padding-bottom: 15px;">
+            <label class="col-form-label col-lg-2 col-sm-12">联系人类型 <span
+                    style="color: #F00">*</span>
+            </label>
+            <div class="col-lg-3">
+                <select class="form-control m-input&#45;&#45;fixed"
+                        v-model="list[i].contactType">
+                    <option v-for="option in contacttype_arr"
+                            v-bind:value="option.id">{{ option.typename}}
+                    </option>
+                </select>
+            </div >
+            <label class="col-form-label col-lg-2 col-sm-12"> 数量<span
+                    style="color: #F00">*</span></label>
+            <div class="col-lg-3">
+                <input type="text" v-model="list[i].number"
+                       class="form-control m-input&#45;&#45;fixed"
+                       placeholder=""/>
+            </div>
+            <div class="col-lg-2">
+                <div data-repeater-delete="" v-on:click="deleteNode(i)" style="margin-left: 35px;"
+                     class="btn-sm btn btn-danger m-btn m-btn&#45;&#45;icon m-btn&#45;&#45;pill">
+                    <span>
+                        <span> 删除 </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+	</div>
+	<div class="m-form__group form-group row">
+	    <label class="col-lg-4 col-form-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+	    <div class="col-lg-4" v-on:click="addNode()">
+	        <div data-repeater-create="" style="text-align: center"
+	             class="btn btn btn-sm btn-brand m-btn m-btn--icon m-btn--pill m-btn--wide">
+	            <span>
+	                <span> 添加 </span>
+	            </span>
+	        </div>
+	    </div>
+	</div>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            contacttype_arr:[
+                {id: 1, typename: '家人'},
+                {id: 2, typename: '朋友'},
+                {id: 3, typename: '同事'}
+            ],
+            //联系人类型数组
+            list:[
+                {contactType: '', number: ''}
+            ],
+        },
+       //初始化方法
+        mounted:function () {
+
+        },
+        methods: {
+
+           //添加标本div
+            addNode:function() {
+                this.list.push({contactType: '', number: ''});
+            },
+          //删除样本div
+            deleteNode:function(i) {
+                this.list.splice(i,1);  //删除index为i,位置的数组元素
+            }
+        }
+    })
+</script>
+</body>
+</html>

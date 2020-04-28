@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
+		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<!--item是值，index是下标，从0开始计数-->
+			<div v-for="(item,index) in items" v-bind:id="'aaa'+index">
+				 <label for="">姓名</label>
+			     <input type="text" v-bind:id="'name' + index" />
+			     <label for="">年龄</label>
+			     <input type="text" v-bind:id="'age' + index"/>
+			     <label for="">性别</label>
+			     <select name="" :id="'sex' + index">
+			     	<option value="">请选择性别</option>
+			     	<option value="男">男</option>
+			     	<option value="女">女</option>
+			     </select>
+			     <button v-on:click="deleteTest">删除</button>
+			</div>
+			<button v-on:click="addTest">新增</button>
+			<br /><br />
+			<button v-on:click="result">提交</button>
+		</div>
+	<script>
+		var vm = new Vue({
+			el : '#app',
+			data : {
+				items : [1,1,1,1,1],
+				text : 0
+			},
+			methods : {
+				addTest : function(){
+					this.items.push(this.text++)
+				},
+				deleteTest : function(){
+					this.items.pop(this.text)
+				},
+				result : function(){
+					for(var i=0 ; i<vm.items.length; i++){
+						console.log($("#name"+i).val() + "  " + $("#age"+i).val() + "  " + $("#sex"+i).val())
+					}
+				}
+			}
+		})
+	</script>
+	</body>
+</html>
+————————————————
+版权声明：本文为CSDN博主「奔跑吧大毛孩」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/qq_24806045/java/article/details/85279034

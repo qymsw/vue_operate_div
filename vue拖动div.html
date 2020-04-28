@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../vue.js"></script>
+    <style type="text/css">
+        .drag{
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .active{
+            border: 1px solid blue;
+        }
+        .redBorder{
+            border: 1px solid red;
+        }
+    </style>
+</head>
+<body>
+<div id="app1">
+        <h3>{{x}},{{y}}</h3>
+        <div v-drag="{setXY:setXY,getFlag:getFlag,setFlag:setFlag,setActive:setActive,setRedBorder:setRedBorder}" class="drag" :class="{active:isActive,redBorder:redBorder}"></div>
+<!--        <div v-drag class="drag"></div>-->
+</div>
+<template>
+
+</template>
+<script type="text/javascript">
+    // 拖动div元素
+    let vm1 = new Vue({
+        el:'#app1',
+        data:{
+            x:"0",
+            y:"0",
+            flag:0,
+            isActive:false,
+            redBorder:true,
+        },
+        methods:{
+            setXY:function (x,y) {
+                this.x=x;
+                this.y=y;
+            },
+            getFlag:function () {
+                return this.flag;
+            },
+            setFlag:function (num) {
+                this.flag=num;
+            },
+            setActive:function (b) {
+                this.isActive=b;
+            },
+            setRedBorder:function (b) {
+                this.redBorder=b;
+            }
+        },
+        // 自定义指令
+        directives:{
+            drag(el,binding){
+                el.onclick = function(e){
+                    debugger;
+                    var flag = binding.value.getFlag();
+                    flag = !flag;
+                    var disx = e.pageX - el.offsetLeft;
+                    var disy = e.pageY - el.offsetTop;
+                    document.onmousemove = function (e){
+                        var xx = e.pageX - disx+'px';
+                        var yy = e.pageY - disy+'px'
+                        el.style.left = xx;
+                        el.style.top = yy;
+                        binding.value.setXY(xx,yy)
+                    };
+                    if (!flag) {
+                        document.onmousemove = document.onmouseup = null;
+                    }
+                    binding.value.setFlag(flag);
+                    binding.value.setActive(flag);
+                    binding.value.setRedBorder(!flag);
+                }
+            }
+        }
+    })
+</script>
+</body>
+</html>

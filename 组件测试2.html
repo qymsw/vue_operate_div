@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>组件测试2</title>
+	<script src="../vue.js"></script>
+	<style>
+		.test{
+			width:100px;
+			height: 100px;
+			background-color: red;
+			position: absolute;
+		}
+		.left,.right,.up,.down{
+			display: inline-block;
+			margin:0 1px;
+			background-color: blue;
+			width: 45px;
+			height: 45px;
+			/*position: absolute;*/
+		}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<button @click="edit_show">{{model}}</button>
+		<edit-template v-show="show" v-for="(item,index) in lists" v-bind:todo="lists"></edit-template>
+		<show-template v-show="!show"></show-template>
+	</div>
+	<script>
+		Vue.component('edit-template',{
+			props:['todo'],
+			template:'<div class="test">\
+					  	<div class="left" @mousedown="move"></div>\
+					  	<div class="up" @mousedown="move"></div>\
+					  	<div class="right" @mousedown="move"></div>\
+					  	<div class="down" @mousedown="move"></div>\
+					 </div>',
+			data:function(){
+				return{
+					test:'sdfsdfsdfs'
+				}
+			},
+			methods:{
+					move(e){
+			          // alert('dfdfdf')
+			          // console.log(e.target)
+			          // console.log(e.target.parentNode.title)
+		                let odiv = e.target.parentNode;
+		                        //获取目标元素
+		                // let timestart = new Date().getTime()
+		                // console.log(timestart)
+		                // //算出鼠标相对元素的位置
+		                let disX = e.clientX - odiv.offsetLeft
+		                let disY = e.clientY - odiv.offsetTop
+		                // console.log(disX,disY)
+	                document.onmousemove = (e)=>{       //鼠标按下并移动的事件
+	                    //用鼠标的位置减去鼠标相对元素的位置，得到元素的位置
+	                    let left = e.clientX - disX;    
+	                    let top = e.clientY - disY;                   
+	                    //绑定元素位置到positionX和positionY上面
+	                    // this.positionX = top;
+	                    // this.positionY = left;                    
+	                    //移动当前元素
+	                    odiv.style.left = left + 'px';
+	                    odiv.style.top = top + 'px';
+	                };
+	                document.onmouseup = (e) => {
+	                  // let timeend = new Date().getTime()
+	                  // if((timeend - timestart)<=200){
+	                  //   this.createElem(e.target.parentNode)
+	                  // }
+	                    document.onmousemove = null;
+	                    document.onmouseup = null;    
+	                    //   
+	                    this.todo.push(100)
+	                    console.log(this.todo) 
+	                    // this.lists.push(1)             
+	                };
+	            },
+			}
+		})
+
+		Vue.component('show-template',{
+			template:'<div class="test">show</div>',
+			
+		})
+
+		var app = new Vue({
+			el:'#app',
+			data:{
+				show:true,
+				model:'show',
+				lists:[1,2,3,4,5]
+			},
+			methods:{
+				edit_show:function(){
+					this.show = !this.show
+					this.model = this.model == 'show'?'edit':'show'
+				}
+			}
+		})
+	</script>
+</body>
+</html>

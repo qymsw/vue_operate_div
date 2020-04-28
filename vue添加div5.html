@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>vue添加div</title>
+	<script src="../vue.js"></script>
+	<style>
+		#app{
+			/*width:100px;*/
+			/*height: 100px;*/
+			/*background-color: red;*/
+		}
+		.test{
+			width:100px;
+			height: 100px;
+			background-color: blue;
+			position: absolute;
+		}
+		.small_left,.small_right{
+			width: 40px;
+			height: 100px;
+			background-color: red;
+			display: inline-block;
+		}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<div v-for="(item,index) in lists" v-click="createElem" class="test" v-bind:id="'app'+index" @mousedown="move" v-bind:title="index">
+			<div class="small_left">aaa</div>
+			<div class="small_right">aaa</div>
+		</div>
+	</div>
+	<script>
+		var app = new Vue({
+			el:'#app',
+			data:{
+				lists:[{'index':0}],
+				aaa:'test'
+			},
+			methods:{
+				createElem:function(obj){
+					if(obj.title == this.lists.length-1){
+						var len = this.lists.length
+						this.lists.push({'index':len})
+						// alert('dfdfdf')
+					}
+				},
+				move(e){
+					// alert('dfdfdf')
+					console.log(e.target)
+					console.log(e.target.parentNode.title)
+		            let odiv = e.target.parentNode;
+		                    //获取目标元素
+		            let timestart = new Date().getTime()
+		            console.log(timestart)
+		            // //算出鼠标相对元素的位置
+		            let disX = e.clientX - odiv.offsetLeft
+		            let disY = e.clientY - odiv.offsetTop
+		            console.log(disX,disY)
+		            document.onmousemove = (e)=>{       //鼠标按下并移动的事件
+		                //用鼠标的位置减去鼠标相对元素的位置，得到元素的位置
+		                let left = e.clientX - disX;    
+		                let top = e.clientY - disY;		                
+		                //绑定元素位置到positionX和positionY上面
+		                this.positionX = top;
+		                this.positionY = left;		                
+		                //移动当前元素
+		                odiv.style.left = left + 'px';
+		                odiv.style.top = top + 'px';
+		            };
+		            document.onmouseup = (e) => {
+		            	let timeend = new Date().getTime()
+		            	if((timeend - timestart)<=200){
+		            		this.createElem(e.target.parentNode)
+		            	}
+		                document.onmousemove = null;
+		                document.onmouseup = null;		                
+		            };
+		        },	       
+			}
+		})
+	</script>
+</body>
+</html>
