@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>vue组件基础2</title>
+	<script src="../vue.js"></script>
+	<style>
+		.demo{
+			width: 100px;
+			height: 100px;
+			background-color: red;
+		}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<test-component v-for="(item,index) in lists"></test-component>	
+		<!-- {{testComponent}} -->
+		<!-- <div id="ss">dfdf</div> -->
+	</div>
+	<script>
+		var testComponent = Vue.component('test-component',{
+			template:'<div class="demo">\
+							<button @click="createNode"> createNode</button>	\
+							<button @click="showLeft"> showLeft</button>	\
+							<button @click="showRight"> showRight</button>	\
+					  </div>',
+			data:function(){
+				return{
+					title:'title',
+					leftNode:null,
+					rightNode:null,
+				}
+			},
+			methods:{
+				createNode:function(){
+					var newComponent = new testComponent()
+					newComponent.title = 'amon'
+					newComponent.rightNode = this	
+					this.leftNode = newComponent				
+					app.createNode(newComponent)
+					
+					// this.rightNode = 
+					// this.title = 'mmmmmm'
+					// console.log(this)
+					console.log(newComponent)
+				},
+				showLeft:function(){
+					console.log(this.leftNode)
+					// console.log(new testComponent())
+					// console.log(this.title)
+				},
+				showRight:function(){
+					console.log(this.rightNode)
+				}
+			}
+		})
+
+		var app = new Vue({
+			el:'#app',
+			data:{
+				lists:[]
+			},
+			mounted:function(){				
+				this.lists.push(new testComponent())				
+			},
+			methods:{
+				createNode:function(obj){
+					this.lists.push(obj)
+					// console.log(this.lists[1].rightNode)
+				}
+			}
+
+		})
+	</script>
+</body>
+</html>

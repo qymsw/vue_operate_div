@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>组件</title>
+	<script src="../vue.js"></script>
+	<style>
+		.div1{
+			position: absolute;
+			background-color: red;
+			width:100px;
+			height: 100px;
+		}
+		.left,.right{
+			background-color: green;
+			width: 42px;
+			margin:2px;
+			height: 45px;
+			display: inline-block;
+		}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<test_component v-for="(item,index) in lists" v-binb:message="index">
+			<!-- {{item.index}} -->
+		</test_component>
+		<!-- <test_component></test_component>
+		<test_component></test_component>
+		<test_component></test_component> -->
+	</div>
+	<script>
+		Vue.component('test_component',{
+			template:'<div class="div1">{{message}}\
+					  	<div class="left" @mousedown="move"></div>\
+					  	<div class="right" @mousedown="move"></div>\
+					  	<button @click="showData">编辑</button>\
+					  	<input type="text" name="title" v-model="title"/>\
+					  </div>',
+			props:['message'],
+			data:function(){
+				return {
+					startTime:0,
+					stopTime:0,
+					nodeData:{title:'title1'},
+					title:'',
+					leftNode:null,
+					rigthNode:null,
+					topNode:null,
+					down:null,
+				}
+			},			
+			
+			methods:{
+				createNode:function(obj){
+					obj.right = obj					
+					app.createNode(obj.data)				
+				},
+				move(e){
+		            let odiv = e.target.parentNode;		                       
+	                let disX = e.clientX - odiv.offsetLeft
+	                let disY = e.clientY - odiv.offsetTop		                
+		            document.onmousedown = (e)=>{
+		            	this.startTime = new Date().getTime()
+		            }
+	                document.onmousemove = (e)=>{
+	                    let left = e.clientX - disX;    
+	                    let top = e.clientY - disY;
+	                    odiv.style.left = left + 'px';
+	                    odiv.style.top = top + 'px';
+	                };
+	                document.onmouseup = (e) => {
+	                	this.stopTime = new Date().getTime()
+	                	// console.log(this.stopTime - this.startTime)
+	                	if((this.stopTime - this.startTime) < 200){
+	                		this.createNode(this)	                		
+	                	}	                  
+	                    document.onmousemove = null;
+	                    document.onmouseup = null;                              
+	                };
+				},
+
+				showData(){
+					console.log(this)
+				}
+			}
+		})
+
+		var app = new Vue({
+			el:'#app',
+			data:{
+				lists:[1],
+			},
+			methods:{
+				createNode:function(obj){
+					this.lists.push(obj)
+				}
+			}
+		})
+	</script>
+</body>
+</html>
